@@ -11,7 +11,9 @@
 		4A07FBA31E39A61500A47931 /* libevent_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A07FBA01E39A61500A47931 /* libevent_core.a */; };
 		4A07FBA41E39A61500A47931 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A07FBA11E39A61500A47931 /* libevent.a */; };
 		4A07FBA51E39A61500A47931 /* libevent_extra.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A07FBA21E39A61500A47931 /* libevent_extra.a */; };
-		4A07FBC91E39B08C00A47931 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A07FBC71E39B08C00A47931 /* interface.cpp */; };
+		4A07FBC91E39B08C00A47931 /* network_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A07FBC71E39B08C00A47931 /* network_interface.cpp */; };
+		4A2373401E41632A0060B659 /* data_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A23733E1E41632A0060B659 /* data_interface.cpp */; };
+		4A2373441E416B1A0060B659 /* page_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A2373421E416B1A0060B659 /* page_manager.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,8 +34,14 @@
 		4A07FBA01E39A61500A47931 /* libevent_core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent_core.a; path = "../../Downloads/libevent-release-2.1.8-stable/build/lib/libevent_core.a"; sourceTree = "<group>"; };
 		4A07FBA11E39A61500A47931 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = "../../Downloads/libevent-release-2.1.8-stable/build/lib/libevent.a"; sourceTree = "<group>"; };
 		4A07FBA21E39A61500A47931 /* libevent_extra.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent_extra.a; path = "../../Downloads/libevent-release-2.1.8-stable/build/lib/libevent_extra.a"; sourceTree = "<group>"; };
-		4A07FBC71E39B08C00A47931 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface.cpp; sourceTree = "<group>"; };
-		4A07FBC81E39B08C00A47931 /* interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interface.hpp; sourceTree = "<group>"; };
+		4A07FBC71E39B08C00A47931 /* network_interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = network_interface.cpp; sourceTree = "<group>"; };
+		4A07FBC81E39B08C00A47931 /* network_interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = network_interface.hpp; sourceTree = "<group>"; };
+		4A23733E1E41632A0060B659 /* data_interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = data_interface.cpp; sourceTree = "<group>"; };
+		4A23733F1E41632A0060B659 /* data_interface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = data_interface.hpp; sourceTree = "<group>"; };
+		4A2373411E4165680060B659 /* versioned_value.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = versioned_value.hpp; sourceTree = "<group>"; };
+		4A2373421E416B1A0060B659 /* page_manager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = page_manager.cpp; sourceTree = "<group>"; };
+		4A2373431E416B1A0060B659 /* page_manager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = page_manager.hpp; sourceTree = "<group>"; };
+		4A2373451E4173C10060B659 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,8 +79,14 @@
 			isa = PBXGroup;
 			children = (
 				4A07FB981E39A33B00A47931 /* main.cpp */,
-				4A07FBC71E39B08C00A47931 /* interface.cpp */,
-				4A07FBC81E39B08C00A47931 /* interface.hpp */,
+				4A07FBC71E39B08C00A47931 /* network_interface.cpp */,
+				4A07FBC81E39B08C00A47931 /* network_interface.hpp */,
+				4A23733E1E41632A0060B659 /* data_interface.cpp */,
+				4A23733F1E41632A0060B659 /* data_interface.hpp */,
+				4A2373411E4165680060B659 /* versioned_value.hpp */,
+				4A2373421E416B1A0060B659 /* page_manager.cpp */,
+				4A2373431E416B1A0060B659 /* page_manager.hpp */,
+				4A2373451E4173C10060B659 /* common.h */,
 			);
 			path = BitBase;
 			sourceTree = "<group>";
@@ -144,8 +158,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A2373441E416B1A0060B659 /* page_manager.cpp in Sources */,
+				4A2373401E41632A0060B659 /* data_interface.cpp in Sources */,
 				4A07FB991E39A33B00A47931 /* main.cpp in Sources */,
-				4A07FBC91E39B08C00A47931 /* interface.cpp in Sources */,
+				4A07FBC91E39B08C00A47931 /* network_interface.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +292,7 @@
 				4A07FB9E1E39A33B00A47931 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

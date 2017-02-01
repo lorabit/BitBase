@@ -1,4 +1,4 @@
-#include "interface.hpp"
+#include "network_interface.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -6,6 +6,8 @@
 
 #include <event2/event.h>
 #include <event2/bufferevent.h>
+#include <unistd.h>
+
 
 #define LISTEN_PORT 5211
 #define LISTEN_BACKLOG 32
@@ -84,9 +86,9 @@ void read_cb(struct bufferevent *bev, void *arg)
     
     while (n = bufferevent_read(bev, line, MAX_LINE), n > 0) {
         line[n] = '\0';
-        printf("fd=%u, read line: %s\n", fd, line);
-        
-        bufferevent_write(bev, line, n);
+//        printf("fd=%u, read line: %s\n", fd, line);
+    
+        bufferevent_write(bev,"OK", n);
     }
 }
 
