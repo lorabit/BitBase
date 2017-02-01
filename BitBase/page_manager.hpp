@@ -9,6 +9,7 @@
 #ifndef page_manager_hpp
 #define page_manager_hpp
 
+#include "common.h"
 #include <string>
 #include <stdio.h>
 #include "fcntl.h"

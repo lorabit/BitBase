@@ -7,10 +7,15 @@
 #include <event2/event.h>
 #include <event2/bufferevent.h>
 #include <unistd.h>
+#include "data_interface.hpp"
+
+#include <string>
 
 
 #define LISTEN_PORT 5211
 #define LISTEN_BACKLOG 32
+
+using namespace std;
 
 void do_accept(evutil_socket_t listener, short event, void *arg);
 void read_cb(struct bufferevent *bev, void *arg);
@@ -83,12 +88,12 @@ void read_cb(struct bufferevent *bev, void *arg)
     char line[MAX_LINE+1];
     int n;
     evutil_socket_t fd = bufferevent_getfd(bev);
-    
     while (n = bufferevent_read(bev, line, MAX_LINE), n > 0) {
         line[n] = '\0';
+        if(n>0&& line[n-1] == '\n') line[n-1] = '\0';
 //        printf("fd=%u, read line: %s\n", fd, line);
-    
-        bufferevent_write(bev,"OK", n);
+        string request = string(line);
+        bufferevent_write(bev,process_request(request).c_str(), n);
     }
 }
 

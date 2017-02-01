@@ -14,6 +14,7 @@
 		4A07FBC91E39B08C00A47931 /* network_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A07FBC71E39B08C00A47931 /* network_interface.cpp */; };
 		4A2373401E41632A0060B659 /* data_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A23733E1E41632A0060B659 /* data_interface.cpp */; };
 		4A2373441E416B1A0060B659 /* page_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A2373421E416B1A0060B659 /* page_manager.cpp */; };
+		4A2373481E41AB3F0060B659 /* trie_block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A2373461E41AB3F0060B659 /* trie_block.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +43,8 @@
 		4A2373421E416B1A0060B659 /* page_manager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = page_manager.cpp; sourceTree = "<group>"; };
 		4A2373431E416B1A0060B659 /* page_manager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = page_manager.hpp; sourceTree = "<group>"; };
 		4A2373451E4173C10060B659 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		4A2373461E41AB3F0060B659 /* trie_block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trie_block.cpp; sourceTree = "<group>"; };
+		4A2373471E41AB3F0060B659 /* trie_block.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = trie_block.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +89,8 @@
 				4A2373411E4165680060B659 /* versioned_value.hpp */,
 				4A2373421E416B1A0060B659 /* page_manager.cpp */,
 				4A2373431E416B1A0060B659 /* page_manager.hpp */,
+				4A2373461E41AB3F0060B659 /* trie_block.cpp */,
+				4A2373471E41AB3F0060B659 /* trie_block.hpp */,
 				4A2373451E4173C10060B659 /* common.h */,
 			);
 			path = BitBase;
@@ -161,6 +166,7 @@
 				4A2373441E416B1A0060B659 /* page_manager.cpp in Sources */,
 				4A2373401E41632A0060B659 /* data_interface.cpp in Sources */,
 				4A07FB991E39A33B00A47931 /* main.cpp in Sources */,
+				4A2373481E41AB3F0060B659 /* trie_block.cpp in Sources */,
 				4A07FBC91E39B08C00A47931 /* network_interface.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

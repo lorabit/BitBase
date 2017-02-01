@@ -20,4 +20,6 @@ void data_set(string key, int value);
 versioned_value data_get(string key);
 bool data_cas(string key, versioned_value value);
 
+string process_request(string request);
+
 #endif /* data_interface_hpp */
