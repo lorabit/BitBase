@@ -23,7 +23,7 @@ string charSet = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
 static void BM_MultiThreaded(benchmark::State& state) {
     int i= 0;
     string key = "";
-    for(int j = 0; j < 32; j++) key += "a";
+    for(int j = 0; j < 1; j++) key += "a";
     while (state.KeepRunning()) {
 //        vector<TrieNodePosition> pos = cm->requestTrieNodePosition(1);
 
@@ -45,8 +45,8 @@ BENCHMARK(BM_MultiThreaded)->Threads(1)->Repetitions(10)->Unit(benchmark::kMicro
 int main(int argc, char *argv[])
 {
 
-    printf("%d\n",(int)sizeof(TrieBlock));
-    return 0;
+//    printf("%d\n",(int)sizeof(TrieBlock));
+//    return 0;
     init_database();
 //    data_set("aaa", 5);
 //    data_set("aab", 15);

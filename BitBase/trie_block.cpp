@@ -84,8 +84,9 @@ bool TrieManager::update_node(string key, int value, int version){
         next_pos = node->children_pos[key[i]];
         if(next_pos.page_id == 0 && next_pos.index == 0){
             next_pos = request_position();
-            update_trie_node(node_pos, key[i], next_pos);
-            next = new TrieNode();
+            node->children_pos[key[i]] = next_pos;
+//            update_trie_node(node_pos, key[i], next_pos);
+            next = find_node(next_pos);
         }else
             next = find_node(next_pos);
         node = next;
