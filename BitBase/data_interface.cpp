@@ -9,20 +9,44 @@
 #include "data_interface.hpp"
 #include <vector>
 #include <unordered_map>
+#include "page_manager.hpp"
+#include <cstdlib>
+#include <mutex>
 
 using namespace std;
 
 unordered_map<string, int> memmap;
 
+std::mutex memmap_mutex;
+
+PageManager shared_page_manager("/Users/lorabit/bitbase.bin", 512);
+TrieManager trie_manager(&shared_page_manager);
+
+int init_database(){
+    return shared_page_manager.openFile();
+}
+
 void data_set(string key, int value){
-    memmap[key] = value;
+    lock_guard<std::mutex> guard(memmap_mutex);
+    trie_manager.update_node(key, value, -1);
+//    struct timespec sleeptime;
+//    sleeptime.tv_sec = 0;
+//    sleeptime.tv_nsec = 10000000*(rand()%5);
+//    nanosleep(&sleeptime, NULL);
+//    void * data = shared_page_manager.readPage(0);
+//    for(int i=0;i<100;i++){
+//        shared_page_manager.writePageToDisk(data, 0);
+//    }
 }
 
 
 versioned_value data_get(string key){
-    if(memmap.find(key) == memmap.end())
-        return versioned_value(-1,-1);
-    return versioned_value(0, memmap[key]);
+    TrieNode* node = trie_manager.find_node(key);
+    if(node == NULL) return versioned_value(-1, -1);
+    return versioned_value(node->version, node->value);
+    //    if(memmap.find(key) == memmap.end())
+//        return versioned_value(-1,-1);
+//    return versioned_value(0, memmap[key]);
 }
 
 

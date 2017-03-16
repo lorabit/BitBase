@@ -15,6 +15,8 @@
 		4A2373401E41632A0060B659 /* data_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A23733E1E41632A0060B659 /* data_interface.cpp */; };
 		4A2373441E416B1A0060B659 /* page_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A2373421E416B1A0060B659 /* page_manager.cpp */; };
 		4A2373481E41AB3F0060B659 /* trie_block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A2373461E41AB3F0060B659 /* trie_block.cpp */; };
+		4A58C3E91E529D000028ACAF /* libbenchmark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A58C3E81E529D000028ACAF /* libbenchmark.a */; };
+		4A58C3EC1E52A4330028ACAF /* catalog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A58C3EA1E52A4330028ACAF /* catalog.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +47,9 @@
 		4A2373451E4173C10060B659 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 		4A2373461E41AB3F0060B659 /* trie_block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trie_block.cpp; sourceTree = "<group>"; };
 		4A2373471E41AB3F0060B659 /* trie_block.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = trie_block.hpp; sourceTree = "<group>"; };
+		4A58C3E81E529D000028ACAF /* libbenchmark.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbenchmark.a; path = ../../Downloads/libbenchmark.a; sourceTree = "<group>"; };
+		4A58C3EA1E52A4330028ACAF /* catalog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = catalog.cpp; sourceTree = "<group>"; };
+		4A58C3EB1E52A4330028ACAF /* catalog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catalog.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A58C3E91E529D000028ACAF /* libbenchmark.a in Frameworks */,
 				4A07FBA31E39A61500A47931 /* libevent_core.a in Frameworks */,
 				4A07FBA41E39A61500A47931 /* libevent.a in Frameworks */,
 				4A07FBA51E39A61500A47931 /* libevent_extra.a in Frameworks */,
@@ -92,6 +98,8 @@
 				4A2373461E41AB3F0060B659 /* trie_block.cpp */,
 				4A2373471E41AB3F0060B659 /* trie_block.hpp */,
 				4A2373451E4173C10060B659 /* common.h */,
+				4A58C3EA1E52A4330028ACAF /* catalog.cpp */,
+				4A58C3EB1E52A4330028ACAF /* catalog.hpp */,
 			);
 			path = BitBase;
 			sourceTree = "<group>";
@@ -99,6 +107,7 @@
 		4A07FB9F1E39A61500A47931 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4A58C3E81E529D000028ACAF /* libbenchmark.a */,
 				4A07FBA01E39A61500A47931 /* libevent_core.a */,
 				4A07FBA11E39A61500A47931 /* libevent.a */,
 				4A07FBA21E39A61500A47931 /* libevent_extra.a */,
@@ -164,6 +173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A2373441E416B1A0060B659 /* page_manager.cpp in Sources */,
+				4A58C3EC1E52A4330028ACAF /* catalog.cpp in Sources */,
 				4A2373401E41632A0060B659 /* data_interface.cpp in Sources */,
 				4A07FB991E39A33B00A47931 /* main.cpp in Sources */,
 				4A2373481E41AB3F0060B659 /* trie_block.cpp in Sources */,

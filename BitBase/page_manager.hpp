@@ -18,6 +18,7 @@
 #include <vector>
 #include <list>
 #include <unordered_map>
+#include "catalog.hpp"
 
 //#include "sys/_types/_iovec_t.h"
 
@@ -30,6 +31,7 @@ struct CacheNode {
 
 using namespace std;
 
+class CatalogManager;
 
 class PageManager{
 private:
@@ -39,12 +41,13 @@ private:
     list<CacheNode> page_buffer;
     unordered_map<int, list<CacheNode>::iterator> page_buffer_map;
     int version;
-    
     void* readPageFromDisk(int pageid);
     
     
 public:
-    PageManager(string filename,int cache_size);
+    void truncate(int page_id);
+    CatalogManager * catalog_manager;
+    PageManager(string filename, int cache_size);
     int openFile();
     bool closeFile();
     void* readPage(int pageid);

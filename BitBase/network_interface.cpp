@@ -12,7 +12,7 @@
 #include <string>
 
 
-#define LISTEN_PORT 5211
+#define LISTEN_PORT 5214
 #define LISTEN_BACKLOG 32
 
 using namespace std;
@@ -82,6 +82,8 @@ void do_accept(evutil_socket_t listener, short event, void *arg)
     bufferevent_enable(bev, EV_READ|EV_WRITE|EV_PERSIST);
 }
 
+int n_p = 0;
+
 void read_cb(struct bufferevent *bev, void *arg)
 {
 #define MAX_LINE    256
@@ -92,7 +94,11 @@ void read_cb(struct bufferevent *bev, void *arg)
         line[n] = '\0';
         if(n>0&& line[n-1] == '\n') line[n-1] = '\0';
 //        printf("fd=%u, read line: %s\n", fd, line);
+        int cp = ++n_p;
         string request = string(line);
+        if(cp<n_p)
+        printf("%d\n",cp);
+        
         bufferevent_write(bev,process_request(request).c_str(), n);
     }
 }

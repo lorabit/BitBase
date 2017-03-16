@@ -16,6 +16,8 @@
 
 using namespace std;
 
+int init_database();
+
 void data_set(string key, int value);
 versioned_value data_get(string key);
 bool data_cas(string key, versioned_value value);

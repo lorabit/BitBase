@@ -9,7 +9,7 @@
 #ifndef common_h
 #define common_h
 
-#define PAGE_SIZE   0x1000
+
 
 
 
