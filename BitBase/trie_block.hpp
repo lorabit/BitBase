@@ -15,33 +15,33 @@
 using namespace std;
 
 
-#define TRIEBLOCK_LENGTH    1
-#define TRIENODE_LENGTH     256
+#define TRIEBLOCK_LENGTH    33
+#define TRIENODE_LENGTH     12
 
 struct TrieNodePosition{
     int page_id;
     int index;
     TrieNodePosition(int _page_id, int _index):page_id(_page_id), index(_index){};
-    
     TrieNodePosition():page_id(0), index(0){};
 };
 
 struct TrieNode {
     int value;
     int version;
-//    char children[TRIENODE_LENGTH];
+    char children[TRIENODE_LENGTH];
+    TrieNodePosition next;
     TrieNodePosition children_pos[TRIENODE_LENGTH];
     TrieNode(){
-        for(int i = 0; i < TRIENODE_LENGTH; i++){
-            children_pos[i].index=0;
-            children_pos[i].page_id=0;
-        }
+//        for(int i = 0; i < TRIENODE_LENGTH; i++){
+//            children_pos[i].index=0;
+//            children_pos[i].page_id=0;
+//        }
     }
 };
 
 struct TrieBlock {
     TrieNode nodes[TRIEBLOCK_LENGTH];
-    char _[4096 - 2056];
+    char _[4096 - 4092];
     TrieBlock(){
         for(int i = 0; i < TRIEBLOCK_LENGTH; i++)
             nodes[i] = TrieNode();
