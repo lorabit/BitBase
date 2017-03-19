@@ -26,7 +26,8 @@
 struct CacheNode {
     void * data;
     int page_id;
-    CacheNode(void* _data, int _page_id): data(_data), page_id(_page_id){}
+    int reference_count;
+    CacheNode(void* _data, int _page_id): data(_data), page_id(_page_id), reference_count(0){}
 };
 
 using namespace std;
@@ -42,15 +43,18 @@ private:
     unordered_map<int, list<CacheNode>::iterator> page_buffer_map;
     int version;
     void* readPageFromDisk(int pageid);
+    void move_to_rear(const list<CacheNode>::iterator & list_iter);
+    
     
     
 public:
-    void truncate(int page_id);
     CatalogManager * catalog_manager;
+    void truncate(int page_id);
     PageManager(string filename, int cache_size);
     int openFile();
     bool closeFile();
     void* readPage(int pageid);
+    void release(int page_id);
     bool writePageToDisk(void* data, int pageid);
 };
 

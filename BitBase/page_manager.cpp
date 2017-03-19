@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mutex>
-#include "trie_block.hpp"
 
 #define handle_error(msg) \
 do { perror(msg); exit(EXIT_FAILURE); } while (0)
@@ -29,7 +28,8 @@ int PageManager::openFile(){
         perror("Error opening file");
     }
     catalog_manager = new CatalogManager(filename+".catalog");
-    truncate(0);
+    if(catalog_manager->page->page_id == 0)
+        truncate(0);
     return fd;
 }
 
@@ -46,39 +46,70 @@ std::mutex read_page_mutex;
 std::mutex write_page_mutex;
 
 void PageManager::truncate(int page_id){
-    ftruncate(fd, (page_id/1024+2)*1024*PAGE_SIZE);
+    printf("truncate %lld\n",off_t(page_id/1024+1)*1024*PAGE_SIZE);
+    ftruncate(fd, off_t(page_id/1024+1)*1024*PAGE_SIZE);
+//    void * new_space = mmap(NULL, 1024*PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, off_t(page_id/1024)*1024*PAGE_SIZE);
+//    memset(new_space, 0, 1024*PAGE_SIZE);
+//    munmap(new_space, 1024*PAGE_SIZE);
 }
 
-void* PageManager::readPage(int page_id){
-    lock_guard<std::mutex> guard(read_page_mutex);
-    unordered_map<int, list<CacheNode>::iterator>::iterator map_iter = page_buffer_map.find(page_id);
-    if(map_iter!=page_buffer_map.end()){
-        list<CacheNode>::iterator list_iter = map_iter->second;
+
+void PageManager::move_to_rear(const list<CacheNode>::iterator & list_iter){
         CacheNode node = (*list_iter);
         page_buffer.erase(list_iter);
         page_buffer.push_back(node);
-        page_buffer_map[page_id] = --page_buffer.end();
-        return node.data;
+        page_buffer_map[node.page_id] = --page_buffer.end();
+}
+
+void* PageManager::readPage(int page_id){
+//    lock_guard<std::mutex> guard(read_page_mutex);
+    unordered_map<int, list<CacheNode>::iterator>::iterator map_iter = page_buffer_map.find(page_id);
+    if(map_iter!=page_buffer_map.end()){
+        list<CacheNode>::iterator list_iter = map_iter->second;
+        void * ret = list_iter->data;
+        list_iter->reference_count ++;
+//        printf("%d = %p %d\n",page_id, list_iter->data, list_iter->reference_count);
+        move_to_rear(list_iter);
+        return ret;
     }
     if(page_buffer.size()==cache_size){
-
-//        free(page_buffer.back().data);
-        munmap(page_buffer.back().data, PAGE_SIZE);
-        page_buffer_map.erase(page_buffer.back().page_id);
-        page_buffer.erase(--page_buffer.end());
+        while(page_buffer.size()==cache_size){
+            if(page_buffer.front().page_id == page_id){
+                move_to_rear(page_buffer.begin());
+                break;
+            }
+            if(page_buffer.front().reference_count == 0){
+//                printf("%d = d(%p) %d\n",page_buffer.front().page_id, page_buffer.front().data, page_buffer.front().reference_count);
+                munmap(page_buffer.front().data, PAGE_SIZE);
+                page_buffer_map.erase(page_buffer.front().page_id);
+                page_buffer.erase(page_buffer.begin());
+                break;
+            }else{
+                move_to_rear(page_buffer.begin());
+            }
+            
+        }
     }
     CacheNode node = CacheNode(readPageFromDisk(page_id), page_id);
+    node.reference_count++;
+//    printf("%d = n(%p) %d\n",page_id, node.data, node.reference_count);
     page_buffer.push_back(node);
     page_buffer_map[page_id] = --page_buffer.end();
     return node.data;
 }
 
+void PageManager::release(int page_id){
+    unordered_map<int, list<CacheNode>::iterator>::iterator map_iter = page_buffer_map.find(page_id);
+    if(map_iter!=page_buffer_map.end()){
+        list<CacheNode>::iterator list_iter = map_iter->second;
+        list_iter->reference_count --;
+//        printf("%d = %d\n",page_id, list_iter->reference_count);
+    }
+}
+
 void* PageManager::readPageFromDisk(int page_id){
 //    printf("%d\n",PAGE_SIZE);
-    void* data = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, PAGE_SIZE*(page_id+1));
-    if (data == MAP_FAILED)
-        handle_error("mmap");
-    data = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, PAGE_SIZE*page_id);
+    void* data = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, off_t(PAGE_SIZE)*page_id);
     if (data == MAP_FAILED)
         handle_error("mmap");
 //    printf("Read\n");
@@ -86,8 +117,8 @@ void* PageManager::readPageFromDisk(int page_id){
 }
 
 bool PageManager::writePageToDisk(void * data, int page_id){
-    lock_guard<std::mutex> guard(write_page_mutex);
-    size_t ret = pwrite(fd, data, PAGE_SIZE, PAGE_SIZE*page_id);
+//    lock_guard<std::mutex> guard(write_page_mutex);
+    size_t ret = pwrite(fd, data, PAGE_SIZE, off_t(PAGE_SIZE)*page_id);
     if(ret == -1){
         printf("Error writing file %s\n",filename.c_str());
         return false;

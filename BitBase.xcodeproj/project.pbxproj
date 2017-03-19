@@ -17,6 +17,7 @@
 		4A2373481E41AB3F0060B659 /* trie_block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A2373461E41AB3F0060B659 /* trie_block.cpp */; };
 		4A58C3E91E529D000028ACAF /* libbenchmark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A58C3E81E529D000028ACAF /* libbenchmark.a */; };
 		4A58C3EC1E52A4330028ACAF /* catalog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A58C3EA1E52A4330028ACAF /* catalog.cpp */; };
+		4A7D29E01E7E3B3500F5C192 /* hash_trie_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A7D29DE1E7E3B3500F5C192 /* hash_trie_manager.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +51,8 @@
 		4A58C3E81E529D000028ACAF /* libbenchmark.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbenchmark.a; path = ../../Downloads/libbenchmark.a; sourceTree = "<group>"; };
 		4A58C3EA1E52A4330028ACAF /* catalog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = catalog.cpp; sourceTree = "<group>"; };
 		4A58C3EB1E52A4330028ACAF /* catalog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catalog.hpp; sourceTree = "<group>"; };
+		4A7D29DE1E7E3B3500F5C192 /* hash_trie_manager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hash_trie_manager.cpp; sourceTree = "<group>"; };
+		4A7D29DF1E7E3B3500F5C192 /* hash_trie_manager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = hash_trie_manager.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +103,8 @@
 				4A2373451E4173C10060B659 /* common.h */,
 				4A58C3EA1E52A4330028ACAF /* catalog.cpp */,
 				4A58C3EB1E52A4330028ACAF /* catalog.hpp */,
+				4A7D29DF1E7E3B3500F5C192 /* hash_trie_manager.hpp */,
+				4A7D29DE1E7E3B3500F5C192 /* hash_trie_manager.cpp */,
 			);
 			path = BitBase;
 			sourceTree = "<group>";
@@ -172,6 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A7D29E01E7E3B3500F5C192 /* hash_trie_manager.cpp in Sources */,
 				4A2373441E416B1A0060B659 /* page_manager.cpp in Sources */,
 				4A58C3EC1E52A4330028ACAF /* catalog.cpp in Sources */,
 				4A2373401E41632A0060B659 /* data_interface.cpp in Sources */,

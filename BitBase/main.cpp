@@ -9,6 +9,9 @@
 #include "data_interface.hpp"
 #include "benchmark/benchmark.h"
 #include "catalog.hpp"
+#include "hash_trie_manager.hpp"
+
+
 
 using namespace std;
 
@@ -18,19 +21,28 @@ void test(char  *a){
     a[2] = 1;
 }
 
-string charSet = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_- ";
+//string charSet = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_- ";
+
+string charSet = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 static void BM_MultiThreaded(benchmark::State& state) {
     int i= 0;
     string key = "";
-    for(int j = 0; j < 1; j++) key += "a";
+    for(int j = 0; j < 8; j++) key += charSet[rand()%charSet.size()];
     while (state.KeepRunning()) {
-//        vector<TrieNodePosition> pos = cm->requestTrieNodePosition(1);
-
-        key[rand()%key.size()] = charSet[rand()%charSet.size()];
-        data_set(key,rand());
+        int p = rand();
+//        printf("%d\n",p);
+        data_set(to_string(p), p);
+//        versioned_value test = data_get(to_string(p));
+//        if(test.value!=p){
+//            printf("--------------- error %d %d %d\n",p,test.value, test.version);
+//        }
+        
+        
+//        key[rand()%key.size()] = charSet[rand()%charSet.size()];
+//        data_get(key);
+//        data_set(key,1);
         i++;
-//        state.SetIterationTime(1.1);
     }
     state.SetItemsProcessed(i);
     if (state.thread_index == 0) {
@@ -41,24 +53,55 @@ static void BM_MultiThreaded(benchmark::State& state) {
 BENCHMARK(BM_MultiThreaded)->Threads(1)->Repetitions(10)->Unit(benchmark::kMicrosecond)->UseRealTime();
 
 
+void benchmarks(int argc, char *argv[]){
+    ::benchmark::Initialize(&argc, argv);
+    ::benchmark::RunSpecifiedBenchmarks();
+}
+
+void correct(){
+//    init_database();
+    data_set("49", 49);
+
+    printf("%d\n",data_get("49").value);
+    printf("%d\n",data_get("aaabbb").value);
+    printf("%d\n",data_get("aab").value);
+    printf("%d\n",data_get("aaaaaaaaf").value);
+    printf("%d\n",data_get("aaf").value);
+}
+
+void testSize(){
+    printf("%d\n",(int)sizeof(HashTrieBlock));
+}
+
+void interactive(){
+    while(true){
+        int p;
+        scanf("%d",&p);
+        data_set(to_string(p), p);
+        versioned_value test = data_get(to_string(p));
+        if(test.value!=p){
+            printf("error %d %d\n",p,test.value);
+        }else{
+            printf("OK %d %d\n",p,test.version);
+        
+        }
+    }
+}
+
 
 int main(int argc, char *argv[])
 {
-
-//    printf("%d\n",(int)sizeof(TrieBlock));
-//    return 0;
+    
     init_database();
-//    data_set("aaa", 5);
-//    data_set("aab", 15);
-//    data_set("aaaaaaaaf", 19);
-//    printf("%d\n",data_get("aaa").value);
-//    printf("%d\n",data_get("aaabbb").value);
-//    printf("%d\n",data_get("aab").value);
-//    printf("%d\n",data_get("aaaaaaaaf").value);
     
-    ::benchmark::Initialize(&argc, argv);
-    ::benchmark::RunSpecifiedBenchmarks();
+//    inspect();
+//        testSize();
+        benchmarks(argc, argv);
+//    interactive();
+//    correct();
     
+
+//
 //    char a[5];
 //    printf("%p\n",&a);
 //    a[2] = 5;

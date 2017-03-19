@@ -24,9 +24,9 @@ class CatalogManager{
 private:
     int fd;
     string filename;
-    CatalogPage * page;
     
 public:
+    CatalogPage * page;
     CatalogManager(string filename);
     vector<TrieNodePosition> requestTrieNodePosition(int n);
     TrieNodePosition requestTrieNodePosition();

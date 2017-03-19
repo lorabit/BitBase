@@ -24,9 +24,19 @@ TrieNode* TrieManager::find_node(TrieNodePosition pos){
     return &block->nodes[pos.index];
 }
 
-TrieNode* TrieManager::find_node(string key){
-    TrieNode* node = root();
+
+versioned_value TrieManager::get_value(string key){
     TrieNodePosition pos;
+    TrieNode* node = find_node(key,pos);
+    if(node == NULL) return versioned_value(-1, -1);
+    versioned_value ret = versioned_value(node->version, node->value);
+    page_manager->release(pos.page_id);
+    return ret;
+}
+
+TrieNode* TrieManager::find_node(string key, TrieNodePosition & pos){
+    TrieNode* node = root();
+    TrieNodePosition next_pos;
     bool find = false;
     for(int i = 0; i < key.length(); i++){
         find = false;
@@ -34,39 +44,31 @@ TrieNode* TrieManager::find_node(string key){
         while(j<TRIENODE_LENGTH || node->next.index+node->next.page_id>0){
             if(j == TRIENODE_LENGTH){
                 j = 0;
-                pos = node->next;
+                next_pos = node->next;
+                page_manager->release(pos.page_id);
+                pos = next_pos;
                 node = find_node(pos);
             }
-            if(node->children[j] == '\0') return NULL;
+            if(node->children[j] == '\0') {
+                page_manager->release(pos.page_id);
+                return NULL;
+            }
             if(node->children[j] == key[i]){
-                pos = node->children_pos[j];
+                next_pos = node->children_pos[j];
+                page_manager->release(pos.page_id);
+                pos = next_pos;
                 node = find_node(pos);
                 find = true;
                 break;
             }
             j++;
         }
-        if(!find) return NULL;
+        if(!find) {
+            page_manager->release(pos.page_id);
+            return NULL;
+        }
     }
     return node;
-}
-
-
-
-void TrieManager::update_trie_node(TrieNodePosition& c_pos, char key, TrieNodePosition& pos){
-    TrieBlock* block = (TrieBlock*)page_manager->readPage(c_pos.page_id);
-    for(int i = 0; i < TRIENODE_LENGTH; i++)
-        if(block->nodes[c_pos.index].children[i] == key){
-            block->nodes[c_pos.index].children_pos[i] = pos;
-            break;
-        }
-}
-
-void TrieManager::update_trie_node(TrieNodePosition& c_pos, int value, int version){
-    TrieBlock* block = (TrieBlock*)page_manager->readPage(c_pos.page_id);
-    block->nodes[c_pos.index].value = value;
-    block->nodes[c_pos.index].version = version;
-//    page_manager->writePageToDisk(block, c_pos.page_id);
 }
 
 TrieNodePosition TrieManager::request_position(){
@@ -83,16 +85,22 @@ bool TrieManager::update_node(string key, int value, int version){
     TrieNodePosition node_pos = TrieNodePosition(0, 0);
     TrieNode* next;
     TrieNodePosition next_pos = TrieNodePosition(0, 0);
-    
+//    printf("\n");
+//    if(key == "178"){
+//        printf("\n");
+//    }
     for(int i = 0; i < key.length(); i++){
         int j = 0;
         bool created = false;
         while(j<TRIENODE_LENGTH || node->next.index+node->next.page_id>0){
             if(j == TRIENODE_LENGTH){
                 j = 0;
-                node_pos = node->next;
+                next_pos = node->next;
+                page_manager->release(node_pos.page_id);
+                node_pos = next_pos;
                 node = find_node(node_pos);
             }
+//            printf("%c",node->children[j]);
             if(node->children[j] == '\0'){
                 next_pos = request_position();
                 next = find_node(next_pos);
@@ -110,16 +118,31 @@ bool TrieManager::update_node(string key, int value, int version){
             j++;
         }
         if (created == false) {
-            node->next = request_position();
-            node = find_node(node->next);
+            next_pos = request_position();
+            node->next = next_pos;
+            next = find_node(next_pos);
+            next->value = node->value;
+            next->version = node->version;
+//            next->next.index = 0;
+//            next->next.page_id = 0;
+            node = next;
+            page_manager->release(node_pos.page_id);
+            node_pos = next_pos;
             next_pos = request_position();
             next = find_node(next_pos);
             node->children[0] = key[i];
             node->children_pos[0] = next_pos;
+            if(key[i] == '\0' || (node->next.page_id == node_pos.page_id && node->next.index == node_pos.index)){
+                perror("err");
+            }
         }
+//        printf("\n");
+        page_manager->release(node_pos.page_id);
         node_pos = next_pos;
         node = next;
     }
-    update_trie_node(node_pos, value, version>0?version:(node->version+1));
+    node->version =version>0?version:(node->version+1);
+    node->value = value;
+    page_manager->release(node_pos.page_id);
     return true;
 }

@@ -9,21 +9,14 @@
 #ifndef trie_block_hpp
 #define trie_block_hpp
 
-#include <stdio.h>
+#include "common.h"
+
 #include <string>
+#include "versioned_value.hpp"
+
 
 using namespace std;
 
-
-#define TRIEBLOCK_LENGTH    33
-#define TRIENODE_LENGTH     12
-
-struct TrieNodePosition{
-    int page_id;
-    int index;
-    TrieNodePosition(int _page_id, int _index):page_id(_page_id), index(_index){};
-    TrieNodePosition():page_id(0), index(0){};
-};
 
 struct TrieNode {
     int value;
@@ -41,7 +34,7 @@ struct TrieNode {
 
 struct TrieBlock {
     TrieNode nodes[TRIEBLOCK_LENGTH];
-    char _[4096 - 4092];
+    char padding[4096 - 4088];
     TrieBlock(){
         for(int i = 0; i < TRIEBLOCK_LENGTH; i++)
             nodes[i] = TrieNode();
@@ -50,19 +43,18 @@ struct TrieBlock {
 
 #include "page_manager.hpp"
 
-#define PAGE_SIZE   4096
-
 class PageManager;
 
 class TrieManager{
 private:
     PageManager* page_manager;
+    TrieNode* root();
+    TrieNode* find_node(TrieNodePosition pos);
+    TrieNode* find_node(string key, TrieNodePosition & pos);
     TrieNodePosition request_position();
 public:
     TrieManager(PageManager* pageManager);
-    TrieNode* root();
-    TrieNode* find_node(TrieNodePosition pos);
-    TrieNode* find_node(string key);
+    versioned_value get_value(string key);
     bool update_node(string key, int value, int version);
     void update_trie_node(TrieNodePosition& c_pos, char key, TrieNodePosition& pos);
     void update_trie_node(TrieNodePosition& c_pos, int value, int version);

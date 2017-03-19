@@ -10,6 +10,28 @@
 #define common_h
 
 
+#define PAGE_SIZE   4096
+
+
+#define TRIEBLOCK_LENGTH    32
+#define TRIENODE_LENGTH     12
+
+//#define TRIEBLOCK_LENGTH    64
+//#define TRIENODE_LENGTH     5
+
+//#define TRIEBLOCK_LENGTH    113
+//#define TRIENODE_LENGTH     2
+
+//#define TRIEBLOCK_LENGTH    146
+//#define TRIENODE_LENGTH     1
+
+
+struct TrieNodePosition{
+    int page_id;
+    int index;
+    TrieNodePosition(int _page_id, int _index):page_id(_page_id), index(_index){};
+    TrieNodePosition():page_id(0), index(0){};
+};
 
 
 

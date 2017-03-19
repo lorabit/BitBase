@@ -19,31 +19,31 @@ unordered_map<string, int> memmap;
 
 std::mutex memmap_mutex;
 
-PageManager shared_page_manager("/Users/lorabit/bitbase.bin", 512);
+PageManager shared_page_manager("/Users/lorabit/bitbase.bin", 1024000);
 TrieManager trie_manager(&shared_page_manager);
 
 int init_database(){
     return shared_page_manager.openFile();
 }
 
+void inspect(){
+//    TrieNode* node = trie_manager.find_node(TrieNodePosition(4, 0));
+//    printf("%d - %d %d\n",node->value,node->next.page_id, node->next.index);
+//    for(int i = 0; i < TRIENODE_LENGTH; i++)
+//        printf("%c-%d %d ; ",node->children[i], node->children_pos[i].page_id, node->children_pos[i].index);
+//    shared_page_manager.release(4);
+}
+
 void data_set(string key, int value){
-    lock_guard<std::mutex> guard(memmap_mutex);
+//    TrieNodePosition pos = trie_manager.request_position();
+//    printf("%d %d\n",pos.page_id,pos.index);
+//    lock_guard<std::mutex> guard(memmap_mutex);
     trie_manager.update_node(key, value, -1);
-//    struct timespec sleeptime;
-//    sleeptime.tv_sec = 0;
-//    sleeptime.tv_nsec = 10000000*(rand()%5);
-//    nanosleep(&sleeptime, NULL);
-//    void * data = shared_page_manager.readPage(0);
-//    for(int i=0;i<100;i++){
-//        shared_page_manager.writePageToDisk(data, 0);
-//    }
 }
 
 
 versioned_value data_get(string key){
-    TrieNode* node = trie_manager.find_node(key);
-    if(node == NULL) return versioned_value(-1, -1);
-    return versioned_value(node->version, node->value);
+    return trie_manager.get_value(key);
     //    if(memmap.find(key) == memmap.end())
 //        return versioned_value(-1,-1);
 //    return versioned_value(0, memmap[key]);
