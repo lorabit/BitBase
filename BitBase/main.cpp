@@ -11,6 +11,8 @@
 #include "catalog.hpp"
 #include "hash_trie_manager.hpp"
 
+#include <iostream>
+#include <sys/time.h>
 
 
 using namespace std;
@@ -32,22 +34,20 @@ static void BM_MultiThreaded(benchmark::State& state) {
     while (state.KeepRunning()) {
         int p = rand();
 //        printf("%d\n",p);
-        data_set(to_string(p), p);
+//        data_get(to_string(p));
+//        data_set(to_string(p), p);
 //        versioned_value test = data_get(to_string(p));
 //        if(test.value!=p){
 //            printf("--------------- error %d %d %d\n",p,test.value, test.version);
 //        }
         
         
-//        key[rand()%key.size()] = charSet[rand()%charSet.size()];
-//        data_get(key);
+        key[rand()%key.size()] = charSet[rand()%charSet.size()];
+        data_get(key);
 //        data_set(key,1);
         i++;
     }
     state.SetItemsProcessed(i);
-    if (state.thread_index == 0) {
-      
-    }
 }
 
 BENCHMARK(BM_MultiThreaded)->Threads(1)->Repetitions(10)->Unit(benchmark::kMicrosecond)->UseRealTime();
@@ -70,7 +70,7 @@ void correct(){
 }
 
 void testSize(){
-    printf("%d\n",(int)sizeof(HashTrieBlock));
+    printf("%d\n",(int)sizeof(TrieNode));
 }
 
 void interactive(){
@@ -88,15 +88,62 @@ void interactive(){
     }
 }
 
+void int_key(int m, int count){
+    int p = 0;
+    for(int i = 0; i < count; i++){
+        p = rand()%m;
+        data_set(to_string(p), p);
+    }
+}
+
+void edit_str(int n, int m, int count){
+    string key = "";
+    for(int j = 0; j < n; j++) key += charSet[rand()%m];
+    for(int i = 0; i < count; i++){
+//        cout << key <<endl;
+        key[rand()%n] = charSet[rand()%m];
+        data_set(key,1);
+    }
+}
+
+
+void rand_str(int n, int m, int count){
+    string key = "";
+    for(int j = 0; j < n; j++) key += " ";
+    for(int i = 0; i < count; i++){
+        for(int j = 0; j < n; j++)
+            key[j] = charSet[rand()%m];
+        data_set(key,1);
+    }
+}
+
+void test1(){
+    srand ((unsigned)time(NULL));
+    int n = 1000000;
+    struct timeval tv_begin, tv_end;
+    gettimeofday(&tv_begin, NULL);
+//        int_key(2147483648, n);
+    edit_str(8, 32, n);
+//    rand_str(6, 32, n);
+    gettimeofday(&tv_end, NULL);
+    long time = (tv_end.tv_sec - tv_begin.tv_sec)*1000000 + tv_end.tv_usec - tv_begin.tv_usec;
+    double qps = (double)n*1000/time;
+    cout << "Queries: "<<n<<" \n";
+    printf("Qps: %.6fk\n",qps);
+    printf("Time: %.6fs\n",(double)time/1000000);
+}
+
 
 int main(int argc, char *argv[])
 {
-    
+//    size_t page_size = (size_t) sysconf (_SC_PAGESIZE);
+//    printf("%zu",page_size);
     init_database();
+    test1();
     
 //    inspect();
 //        testSize();
-        benchmarks(argc, argv);
+//        benchmarks(argc, argv);
 //    interactive();
 //    correct();
     

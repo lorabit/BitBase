@@ -12,6 +12,7 @@
 #include "page_manager.hpp"
 #include <cstdlib>
 #include <mutex>
+#include "hash_trie_manager.hpp"
 
 using namespace std;
 
@@ -19,11 +20,15 @@ unordered_map<string, int> memmap;
 
 std::mutex memmap_mutex;
 
-PageManager shared_page_manager("/Users/lorabit/bitbase.bin", 1024000);
+PageManager shared_page_manager(DBFILE, 65536);
 TrieManager trie_manager(&shared_page_manager);
 
 int init_database(){
     return shared_page_manager.openFile();
+}
+
+void clean_database(){
+    shared_page_manager.truncate(0);
 }
 
 void inspect(){
@@ -35,18 +40,12 @@ void inspect(){
 }
 
 void data_set(string key, int value){
-//    TrieNodePosition pos = trie_manager.request_position();
-//    printf("%d %d\n",pos.page_id,pos.index);
-//    lock_guard<std::mutex> guard(memmap_mutex);
     trie_manager.update_node(key, value, -1);
 }
 
 
 versioned_value data_get(string key){
     return trie_manager.get_value(key);
-    //    if(memmap.find(key) == memmap.end())
-//        return versioned_value(-1,-1);
-//    return versioned_value(0, memmap[key]);
 }
 
 

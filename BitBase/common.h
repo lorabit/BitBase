@@ -12,12 +12,16 @@
 
 #define PAGE_SIZE   4096
 
+#define DBFILE  "/Users/lorabit/bitbase.bin"
 
-#define TRIEBLOCK_LENGTH    32
-#define TRIENODE_LENGTH     12
-
+//#define TRIEBLOCK_LENGTH    32
+//#define TRIENODE_LENGTH     12
+//
 //#define TRIEBLOCK_LENGTH    64
 //#define TRIENODE_LENGTH     5
+
+#define TRIENODE_LENGTH     12
+
 
 //#define TRIEBLOCK_LENGTH    113
 //#define TRIENODE_LENGTH     2
@@ -25,6 +29,7 @@
 //#define TRIEBLOCK_LENGTH    146
 //#define TRIENODE_LENGTH     1
 
+#define TRIEBLOCK_LENGTH    PAGE_SIZE/sizeof(TrieNode)
 
 struct TrieNodePosition{
     int page_id;

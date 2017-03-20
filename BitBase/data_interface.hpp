@@ -16,6 +16,7 @@
 
 using namespace std;
 
+void clean_database();
 int init_database();
 
 void data_set(string key, int value);
