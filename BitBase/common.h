@@ -9,7 +9,7 @@
 #ifndef common_h
 #define common_h
 
-
+#define CACHE_SIZE  6553600
 #define PAGE_SIZE   4096
 
 #define DBFILE  "/Users/lorabit/bitbase.bin"
@@ -20,7 +20,8 @@
 //#define TRIEBLOCK_LENGTH    64
 //#define TRIENODE_LENGTH     5
 
-#define TRIENODE_LENGTH     12
+#define TRIENODE_LENGTH     16
+#define TRIEBLOCK_LENGTH    30
 
 
 //#define TRIEBLOCK_LENGTH    113
@@ -29,7 +30,7 @@
 //#define TRIEBLOCK_LENGTH    146
 //#define TRIENODE_LENGTH     1
 
-#define TRIEBLOCK_LENGTH    PAGE_SIZE/sizeof(TrieNode)
+//#define TRIEBLOCK_LENGTH    PAGE_SIZE/sizeof(HashTrieNode)
 
 struct TrieNodePosition{
     int page_id;

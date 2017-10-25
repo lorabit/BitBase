@@ -20,8 +20,8 @@ unordered_map<string, int> memmap;
 
 std::mutex memmap_mutex;
 
-PageManager shared_page_manager(DBFILE, 65536);
-TrieManager trie_manager(&shared_page_manager);
+PageManager shared_page_manager(DBFILE, CACHE_SIZE);
+HashTrieManager trie_manager(&shared_page_manager);
 
 int init_database(){
     return shared_page_manager.openFile();

@@ -56,6 +56,7 @@ public:
     void* readPage(int pageid);
     void release(int page_id);
     bool writePageToDisk(void* data, int pageid);
+    void msync(int page_id);
 };
 
 #endif /* page_manager_hpp */

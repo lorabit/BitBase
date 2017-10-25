@@ -29,21 +29,21 @@ string charSet = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
 
 static void BM_MultiThreaded(benchmark::State& state) {
     int i= 0;
-    string key = "";
-    for(int j = 0; j < 8; j++) key += charSet[rand()%charSet.size()];
+//    string key = "";
+//    for(int j = 0; j < 8; j++) key += charSet[rand()%charSet.size()];
     while (state.KeepRunning()) {
         int p = rand();
 //        printf("%d\n",p);
 //        data_get(to_string(p));
-//        data_set(to_string(p), p);
-//        versioned_value test = data_get(to_string(p));
-//        if(test.value!=p){
-//            printf("--------------- error %d %d %d\n",p,test.value, test.version);
-//        }
+        data_set(to_string(p), p);
+        versioned_value test = data_get(to_string(p));
+        if(test.value!=p){
+            printf("--------------- error %d %d %d\n",p,test.value, test.version);
+        }
         
         
-        key[rand()%key.size()] = charSet[rand()%charSet.size()];
-        data_get(key);
+//        key[rand()%key.size()] = charSet[rand()%charSet.size()];
+//        data_get(key);
 //        data_set(key,1);
         i++;
     }
@@ -59,14 +59,19 @@ void benchmarks(int argc, char *argv[]){
 }
 
 void correct(){
+    for(int i = 0; i < 10000; i ++){
+            printf("%d\n",data_get(to_string(i)).value);
+//        data_set(to_string(i), i);
+    }
+    
 //    init_database();
-    data_set("49", 49);
+//    data_set("49", 49);
 
-    printf("%d\n",data_get("49").value);
-    printf("%d\n",data_get("aaabbb").value);
-    printf("%d\n",data_get("aab").value);
-    printf("%d\n",data_get("aaaaaaaaf").value);
-    printf("%d\n",data_get("aaf").value);
+//    printf("%d\n",data_get("49").value);
+//    printf("%d\n",data_get("aaabbb").value);
+//    printf("%d\n",data_get("aab").value);
+//    printf("%d\n",data_get("aaaaaaaaf").value);
+//    printf("%d\n",data_get("aaf").value);
 }
 
 void testSize(){
@@ -122,9 +127,9 @@ void test1(){
     int n = 1000000;
     struct timeval tv_begin, tv_end;
     gettimeofday(&tv_begin, NULL);
-//        int_key(2147483648, n);
-    edit_str(8, 32, n);
-//    rand_str(6, 32, n);
+        int_key(2048, n);
+//    edit_str(8, 32, n);
+//    rand_str(10, 32, n);
     gettimeofday(&tv_end, NULL);
     long time = (tv_end.tv_sec - tv_begin.tv_sec)*1000000 + tv_end.tv_usec - tv_begin.tv_usec;
     double qps = (double)n*1000/time;
@@ -133,9 +138,22 @@ void test1(){
     printf("Time: %.6fs\n",(double)time/1000000);
 }
 
+void splitbybit(){
+    int char_len = 4;
+    string s = "abcd";
+    int d = (1 << (char_len+1)) -1;
+    int offset = 0;
+    while(offset < s.size()*8){
+        int cur = (s[offset/8] >> (offset%8)) & d;
+        printf("%d ",cur);
+        offset += char_len;
+    }
+}
+
 
 int main(int argc, char *argv[])
 {
+    
 //    size_t page_size = (size_t) sysconf (_SC_PAGESIZE);
 //    printf("%zu",page_size);
     init_database();

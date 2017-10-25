@@ -34,7 +34,7 @@ struct TrieNode {
 
 struct TrieBlock {
     TrieNode nodes[TRIEBLOCK_LENGTH];
-    char padding[PAGE_SIZE - TRIEBLOCK_LENGTH*sizeof(TrieNode)];
+//    char padding[PAGE_SIZE - TRIEBLOCK_LENGTH*sizeof(TrieNode)];
     TrieBlock(){
         for(int i = 0; i < TRIEBLOCK_LENGTH; i++)
             nodes[i] = TrieNode();

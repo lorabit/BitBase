@@ -61,6 +61,15 @@ void PageManager::move_to_rear(const list<CacheNode>::iterator & list_iter){
         page_buffer_map[node.page_id] = --page_buffer.end();
 }
 
+
+void PageManager::msync(int page_id){
+    unordered_map<int, list<CacheNode>::iterator>::iterator map_iter = page_buffer_map.find(page_id);
+    if(map_iter!=page_buffer_map.end()){
+        list<CacheNode>::iterator list_iter = map_iter->second;
+        ::msync(list_iter->data, PAGE_SIZE, MAP_SHARED);
+    };
+}
+
 void* PageManager::readPage(int page_id){
 //    lock_guard<std::mutex> guard(read_page_mutex);
     unordered_map<int, list<CacheNode>::iterator>::iterator map_iter = page_buffer_map.find(page_id);
@@ -80,6 +89,7 @@ void* PageManager::readPage(int page_id){
             }
             if(page_buffer.front().reference_count == 0){
 //                printf("%d = d(%p) %d\n",page_buffer.front().page_id, page_buffer.front().data, page_buffer.front().reference_count);
+                
                 munmap(page_buffer.front().data, PAGE_SIZE);
                 page_buffer_map.erase(page_buffer.front().page_id);
                 page_buffer.erase(page_buffer.begin());
